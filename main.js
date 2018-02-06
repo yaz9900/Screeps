@@ -2,10 +2,11 @@ var roleBuilder = require('role.builder');
 var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleHarvestBeast = require('role.harvestBeast');
-
+var roleRepairer = require('role.repairer');
 
 var sources = Game.spawns.Spawn1.room.find(FIND_SOURCES);
-var sourceLength = sources.length;
+var freeContainers =
+
 var sourceJSON = 0;
 module.exports.loop = function () {
 //console.log(sourceLength);
@@ -20,6 +21,7 @@ module.exports.loop = function () {
     var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
     var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
     var harvestBeast = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvestBeast');
+    var repairer = _.filter(Game.creeps, (creep) => creep.memory.role == 'repairer');
     //console.log('Harvesters: ' + harvesters.length);
 
     if(harvesters.length < 6) {
@@ -43,13 +45,19 @@ module.exports.loop = function () {
             {memory: {role: 'upgrader', source: sourceJSON}});
     }
     
-     if(harvestBeast.length < 2) {
+     if(harvestBeast.length < 0) {
         var newName = 'HarvesBeast' + Game.time;
        // console.log('Spawning new harvestBeast: ' + newName);
-        Game.spawns['Spawn1'].spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE], newName, 
-            {memory: {role: 'harvestBeast', source: sourceJSON}});
+        Game.spawns['Spawn1'].spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,MOVE], newName, 
+            {memory: {role: 'harvestBeast', assignedHarvester: sourceJSON}});
     }
     
+         if(repairer.length < 2) {
+        var newName = 'repairer' + Game.time;
+       // console.log('Spawning new repairer: ' + newName);
+        Game.spawns['Spawn1'].spawnCreep([WORK,WORK,CARRY,MOVE,MOVE], newName, 
+            {memory: {role: 'repairer', source: sourceJSON}});
+    }
     }
     
     if(Game.spawns['Spawn1'].spawning) { 
@@ -81,5 +89,27 @@ module.exports.loop = function () {
         if(creep.memory.role == 'harvestBeast') {
             roleHarvestBeast.run(creep);
         }
+        if(creep.memory.role == 'repairer') {
+            roleRepairer.run(creep);
+        }
     }
+}
+
+
+function freeContainers(){
+    var containers = Game.spawns.Spawn1.room.find(STRUCTURE_CONTAINER);
+    for(i=0; i<containers.length; i++){
+        for(b=0; b<harvestBeast.length; b++){
+            var boolFreeContainer = false;
+            if(!(harvestBeast[b].memory.assignedHarvester === containers[i].id)){
+                boolFreeContainer = true;
+            }
+        }
+        
+
+    }
+
+
+
+    return 
 }
