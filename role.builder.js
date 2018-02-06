@@ -13,7 +13,8 @@ var roleBuilder = {
 	    }
 
 	    if(creep.memory.building) {
-	        var target = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
+			var targets = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
+			
 			//console.log(target)
 			
             if(target) {
