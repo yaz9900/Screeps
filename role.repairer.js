@@ -13,14 +13,25 @@ var roleRepairer = {
 	    }
 
 	    if(creep.memory.repairing) {
-            if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
+            var target = creep.room.find(FIND_STRUCTURES, {
+                filter: function(object){
+                    if(object.structureType != STRUCTURE_ROAD ) {
+                        return false;
+                    }
+                    if(object.hits > object.hitsMax / 3) {
+                     return false;
+                   }
+                    return true;
+                } 
+             });     
+            if(creep.repair(target) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(target, {visualizePathStyle: {stroke: '#008000'}});
             }
         }
         else {
             var sources = creep.room.find(FIND_SOURCES);
             if(creep.harvest(sources[creep.memory.source]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[creep.memory.source], {visualizePathStyle: {stroke: '#ffaa00'}});
+                creep.moveTo(sources[creep.memory.source], {visualizePathStyle: {stroke: '#ffffff'}});
             }
         }
 	}

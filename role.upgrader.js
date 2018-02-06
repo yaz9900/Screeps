@@ -14,13 +14,13 @@ var roleUpgrader = {
 
 	    if(creep.memory.upgrading) {
             if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
+                creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#0000FF'}});
             }
         }
         else {
             var sources = creep.room.find(FIND_SOURCES);
             if(creep.harvest(sources[creep.memory.source]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[creep.memory.source], {visualizePathStyle: {stroke: '#ffaa00'}});
+                creep.moveTo(sources[creep.memory.source], {visualizePathStyle: {stroke: '#ffffff'}});
             }
         }
 	}
