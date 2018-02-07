@@ -49,7 +49,7 @@ module.exports.loop = function () {
         var newName = 'HarvesBeast' + Game.time;
        // console.log('Spawning new harvestBeast: ' + newName);
         Game.spawns['Spawn1'].spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,MOVE], newName, 
-            {memory: {role: 'harvestBeast', assignedHarvester: sourceJSON}});
+            {memory: {role: 'harvestBeast', assignedContainer: freeContainers()}});
     }
     
          if(repairer.length < 2) {
@@ -94,21 +94,18 @@ module.exports.loop = function () {
         }
     }
 }
-
-
 function freeContainers(){
     var containers = Game.spawns.Spawn1.room.find(STRUCTURE_CONTAINER);
     for(i=0; i<containers.length; i++){
+        var boolFreeContainer = true;
         for(b=0; b<harvestBeast.length; b++){
-            var boolFreeContainer = false;
-            if(!(harvestBeast[b].memory.assignedHarvester === containers[i].id)){
-                boolFreeContainer = true;
+            if(harvestBeast[b].memory.assignedContainer == containers[i].id){
+                boolFreeContainer = false;
             }
         }
-        
-
+        if(boolFreeContainer == true){return containers[i].id }
     }
-
+    if(boolFreeContainer == false){console.log("No free containers found")};
 
 
     return 
